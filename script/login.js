@@ -1,14 +1,9 @@
-// login.js - the Log in / Sign up page (login.html)
-// Accounts are saved in the browser, under the same name the main site (script.js) uses,
-// so the main site can see who logged in. Prototype only: this is not real security.
+// login.js - the Log in / Sign up page
 
 const KEY = 'ars_v3';
 
-// Everyone who signs up is a Student, except these emails: they become Administrators.
-// Change or add emails here, e.g. ['admin@school.edu', 'teacher@school.edu']
-const ADMIN_EMAILS = ['admin@school.edu'];
+const ADMIN_EMAILS = ['admin@arpsmcc.com'];
 
-// There are no built-in accounts any more: everyone signs up.
 const SAMPLE_NAMES = [];
 
 const $ = s => document.querySelector(s);
@@ -21,21 +16,19 @@ function usersOf(data) {
   return data.users || SAMPLE_NAMES.map((name, i) => ({ id: i + 1, name, role: i === 1 ? 'admin' : 'student' }));
 }
 
-// Log the person in and open the main site
 function enter(data, user) {
   data.users = usersOf(data);
   data.meId = user.id;
   data.log = [{ u: user.id, t: 'logged in', d: new Date().toLocaleString() }].concat(data.log || []).slice(0, 100);
   try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {}
-  try { sessionStorage.setItem('ars_me', String(user.id)); } catch (e) {}   // this tab's own login
+  try { sessionStorage.setItem('ars_me', String(user.id)); } catch (e) {}
   location.href = 'index.html';
 }
 
-// Already logged in? Go straight to the site.
 (function () {
   const data = loadData();
   let id = data.meId;
-  try { const m = sessionStorage.getItem('ars_me'); if (m !== null) id = m ? Number(m) : null; } catch (e) {}   // this tab's own login
+  try { const m = sessionStorage.getItem('ars_me'); if (m !== null) id = m ? Number(m) : null; } catch (e) {}
   if (id && (data.users || []).some(u => u.id === id && !u.off)) location.href = 'index.html';
 })();
 
@@ -54,7 +47,6 @@ function showTab(tab) {
   message('');
 }
 
-// Opened from a "Sign up" button? Start on the Sign up tab.
 if (new URLSearchParams(location.search).get('tab') === 'signup') showTab('signup');
 
 // ---------- Log in ----------

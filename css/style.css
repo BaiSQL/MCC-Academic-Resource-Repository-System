@@ -14,30 +14,29 @@
    Change a color here and it changes everywhere.
    ===================================================== */
 
-/* Dark theme (the only theme) */
 :root {
-  --page: #16181a;          /* page background */
-  --box: #1f2225;          /* cards, header, pop-ups */
-  --text: #e8e6e1;          /* main text */
-  --text-soft: #b5b3ab;     /* second-level text */
-  --muted: #9a9890;         /* small gray text */
-  --border: #34383c;        /* thin lines around boxes */
-  --border-dark: #44494e;   /* lines around buttons and inputs */
-  --hover: #2b2f33;         /* color when mouse is over a button */
+  --page: #16181a;
+  --box: #1f2225;
+  --text: #e8e6e1;
+  --text-soft: #b5b3ab;
+  --muted: #9a9890;
+  --border: #34383c;
+  --border-dark: #44494e;
+  --hover: #2b2f33;
 
-  --green: #6fb89f;         /* main brand color */
-  --green-dark: #8fd0b8;    /* green when mouse is over it */
-  --green-light: #24352f;   /* soft green background */
-  --on-green: #10201a;      /* text on top of green */
+  --green: #6fb89f;
+  --green-dark: #8fd0b8;
+  --green-light: #24352f;
+  --on-green: #10201a;
 
-  --danger: #ef8a85;        /* red: remove, rejected */
-  --warning: #f0a45a;       /* orange: pending */
-  --success: #6fcf97;       /* green: approved */
-  --highlight: #7a6420;     /* yellow marker in the headline */
-  --note-bg: #3a3420;       /* message box background */
-  --note-border: #6b5d2a;   /* message box border */
+  --danger: #ef8a85;
+  --warning: #f0a45a;
+  --success: #6fcf97;
+  --highlight: #7a6420;
+  --note-bg: #3a3420;
+  --note-border: #6b5d2a;
 
-  color-scheme: dark;       /* dark scrollbars and form controls */
+  color-scheme: dark;
 }
 
 /* =====================================================
@@ -48,7 +47,6 @@
   box-sizing: border-box;
 }
 
-/* Anything with the "hidden" attribute is not shown */
 [hidden] {
   display: none !important;
 }
@@ -82,13 +80,11 @@ h3 {
   margin: 6px 0;
 }
 
-/* Small gray text */
 .mut {
   color: var(--muted);
   font-size: 13px;
 }
 
-/* Page sections share the same side spacing */
 .hero-inner,
 .browse,
 .trending,
@@ -116,7 +112,6 @@ button:hover {
   background: var(--hover);
 }
 
-/* Green buttons */
 .btn-upload,
 .btn-submit,
 button.p,
@@ -133,7 +128,6 @@ button.p:hover,
   background: var(--green-dark);
 }
 
-/* Links that look like buttons (Log in / Sign up) */
 .btn-link,
 .btn-outline {
   display: inline-block;
@@ -160,7 +154,6 @@ button.p:hover,
   background: var(--hover);
 }
 
-/* Red text button (remove, report, suspend) */
 button.d {
   color: var(--danger);
 }
@@ -177,7 +170,6 @@ textarea {
   max-width: 100%;
 }
 
-/* Outline when a button or field is selected with the keyboard */
 button:focus,
 input:focus,
 select:focus,
@@ -186,7 +178,6 @@ textarea:focus {
   outline-offset: 1px;
 }
 
-/* Red number on the notification bell */
 .badge {
   padding: 0 6px;
   font-size: 12px;
@@ -204,7 +195,7 @@ textarea:focus {
 
 .site-header {
   height: 62px;
-  position: sticky;      /* stays at the top while scrolling */
+  position: sticky;
   top: 0;
   z-index: 5;
   background: var(--box);
@@ -231,15 +222,12 @@ textarea:focus {
   color: var(--green);
 }
 
-/* Header logo = picture + title */
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* "Academic Resource" is white; "Repository System" stays green (from .logo span above).
-   .logo .logo-text is more specific than .logo span, so the white wins. */
 .logo .logo-text {
   color: #fff;
 }
@@ -264,10 +252,9 @@ textarea:focus {
    ===================================================== */
 
 html {
-  scroll-padding-top: 76px;   /* links do not hide under the header */
+  scroll-padding-top: 76px;
 }
 
-/* Keeps the page content away from the thin strip */
 .layout {
   padding-left: 14px;
 }
@@ -276,7 +263,7 @@ html {
   position: fixed;
   top: 62px;
   bottom: 0;
-  left: -206px;               /* hidden, only 14px stays visible */
+  left: -206px;
   z-index: 6;
   display: flex;
   flex-direction: column;
@@ -289,7 +276,6 @@ html {
   transition: left 0.2s;
 }
 
-/* Mouse over the strip: the sidebar slides out */
 .sidebar:hover,
 .sidebar:focus-within {
   left: 0;
@@ -304,7 +290,6 @@ html {
   color: var(--muted);
 }
 
-/* Every sidebar link and button looks the same */
 .sidebar a,
 .sidebar button {
   display: block;
@@ -324,7 +309,6 @@ html {
   background: var(--hover);
 }
 
-/* The Upload button stays green */
 .sidebar .btn-upload {
   margin: 8px 0;
   text-align: center;
@@ -336,14 +320,12 @@ html {
   background: var(--green-dark);
 }
 
-/* Admin links stack under each other */
 .sidebar .user-nav {
   flex-direction: column;
   align-items: stretch;
   gap: 4px;
 }
 
-/* Page content takes the rest of the width */
 .content {
   min-width: 0;
 }
@@ -378,7 +360,6 @@ html {
   color: var(--muted);
 }
 
-/* Yellow marker under "set of notes" */
 .highlight {
   background: linear-gradient(transparent 60%, var(--highlight) 60%);
 }
@@ -402,7 +383,6 @@ html {
   color: var(--muted);
 }
 
-/* The three tilted cards on the right */
 .card-stack {
   position: relative;
   width: 240px;
@@ -473,7 +453,6 @@ html {
   border-radius: 8px;
 }
 
-/* One drop-down */
 .dd {
   position: relative;
   flex: 1;
@@ -495,7 +474,6 @@ html {
   text-overflow: ellipsis;
 }
 
-/* The list that opens. Long lists scroll inside it. */
 .dd-menu {
   position: absolute;
   top: 100%;
@@ -528,7 +506,6 @@ html {
   background: var(--hover);
 }
 
-/* The option that is currently chosen */
 .dd-opt.on {
   font-weight: bold;
   background: var(--green-light);
@@ -560,7 +537,6 @@ html {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
-/* Folded corner at the top right */
 .card-fold {
   position: absolute;
   top: 0;
@@ -583,7 +559,7 @@ html {
   margin: 0 0 8px;
   font-size: 14px;
   color: var(--text-soft);
-  overflow-wrap: anywhere;   /* long words wrap instead of being cut off */
+  overflow-wrap: anywhere;
 }
 
 .card-meta,
@@ -601,14 +577,12 @@ html {
   border-top: 1px dashed var(--border);
 }
 
-/* Upvote button after the person voted */
 .upvotes.on {
   color: var(--on-green);
   background: var(--green);
   border-color: var(--green);
 }
 
-/* "No results" message */
 .empty-state,
 .empty {
   padding: 20px;
@@ -616,7 +590,6 @@ html {
   color: var(--muted);
 }
 
-/* Status words: Pending, Approved, Rejected */
 .st {
   font-size: 12px;
   font-weight: bold;
@@ -626,7 +599,6 @@ html {
 .Approved { color: var(--success); }
 .Rejected { color: var(--danger); }
 
-/* Trending list */
 .trending ol {
   margin: 0;
   padding: 12px 12px 12px 36px;
@@ -640,7 +612,6 @@ html {
    8. POP-UP WINDOWS (upload, login, details, admin...)
    ===================================================== */
 
-/* Dark background behind the pop-up */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -662,7 +633,6 @@ html {
   border-radius: 10px;
 }
 
-/* Wider pop-up for details and admin pages */
 .modal.wide {
   max-width: 640px;
 }
@@ -676,7 +646,6 @@ html {
   border: none;
 }
 
-/* Upload form fields */
 .field {
   display: block;
   margin-bottom: 10px;
@@ -699,7 +668,6 @@ html {
   resize: vertical;
 }
 
-/* Yellow message box */
 .modal-message,
 .note {
   margin: 10px 0;
@@ -709,7 +677,6 @@ html {
   border-radius: 6px;
 }
 
-/* File preview (inside the details pop-up) */
 .preview {
   display: flex;
   flex-direction: column;
@@ -717,7 +684,6 @@ html {
   margin: 6px 0 10px;
 }
 
-/* One uploaded file: name + download on top, preview below */
 .pv-item {
   background: var(--page);
   border: 1px solid var(--border);
@@ -746,7 +712,6 @@ html {
   padding: 8px;
 }
 
-/* Files chosen in the upload form (each can be removed before posting) */
 .picked {
   margin: 0 0 10px;
 }
@@ -813,7 +778,6 @@ html {
   margin: 2px 0 0;
 }
 
-/* Text that someone wrote in a post */
 .post-text {
   max-height: 360px;
   overflow: auto;
@@ -852,7 +816,6 @@ html {
   font-size: 14px;
 }
 
-/* AI summary box */
 .sum {
   margin: 8px 0;
   padding: 8px 10px;
@@ -861,7 +824,6 @@ html {
   border-left: 3px solid var(--green);
 }
 
-/* A line of buttons or inputs */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -880,7 +842,6 @@ html {
   justify-content: space-between;
 }
 
-/* One comment or list item */
 .cm {
   padding: 6px 0;
   font-size: 14px;
@@ -1009,7 +970,6 @@ html {
     padding: 10px 16px;
   }
 
-  /* The sidebar becomes a row of buttons under the header */
   .layout {
     padding-left: 0;
   }
@@ -1081,7 +1041,6 @@ html {
   cursor: pointer;
 }
 
-/* Post details: text-only posts */
 .byline {
   margin: -4px 0 12px;
   font-size: 13px;
@@ -1094,7 +1053,6 @@ html {
   line-height: 1.65;
 }
 
-/* Uploader names: bold and white so they stand out */
 .uploader,
 .uploader b,
 .byline b,
@@ -1102,13 +1060,11 @@ html {
   color: #fff;
 }
 
-/* Short look at a post's text inside the Moderation list */
 .post-peek {
   max-height: 120px;
   font-size: 14px;
 }
 
-/* Hide the scrollbars for a cleaner look (scrolling with mouse, touch and keyboard still works) */
 * {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1124,7 +1080,6 @@ html {
    (A rule here wins over the same rule higher up.)
    ===================================================== */
 
-/* ---------- Colors and fonts ---------- */
 :root {
   --page: #131618;
   --box: #1b1f22;
@@ -1146,7 +1101,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- Buttons and fields ---------- */
 button {
   padding: 7px 14px;
   border-radius: 8px;
@@ -1167,7 +1121,6 @@ textarea {
   border-radius: 10px;
 }
 
-/* Keyboard focus ring; fields get a soft green glow instead */
 button:focus,
 a:focus {
   outline: none;
@@ -1187,7 +1140,6 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(111, 184, 159, 0.2);
 }
 
-/* ---------- Header ---------- */
 .site-header {
   height: 64px;
   background: rgba(27, 31, 34, 0.88);
@@ -1212,7 +1164,6 @@ textarea:focus {
   border-radius: 999px;
 }
 
-/* ---------- Sidebar ---------- */
 .side-label {
   font-size: 13px;
   font-weight: 600;
@@ -1229,7 +1180,6 @@ textarea:focus {
   padding: 11px 12px;
 }
 
-/* ---------- Hero ---------- */
 .hero {
   padding: 32px 0 24px;
 }
@@ -1264,7 +1214,6 @@ textarea:focus {
   line-height: 1.55;
 }
 
-/* One search field with the button inside it */
 .search-bar {
   max-width: 520px;
   gap: 6px;
@@ -1297,7 +1246,6 @@ textarea:focus {
   margin: 0;
 }
 
-/* The three sample cards on the right */
 .card-stack {
   width: 230px;
   height: 190px;
@@ -1317,7 +1265,6 @@ textarea:focus {
 .card-b { left: 38px; top: 62px;  transform: rotate(1.5deg); }
 .card-c { left: 76px; top: 124px; transform: rotate(6deg); }
 
-/* ---------- Section titles ---------- */
 .browse,
 .trending {
   padding-top: 24px;
@@ -1341,7 +1288,6 @@ textarea:focus {
   margin-bottom: 14px;
 }
 
-/* ---------- Filters ---------- */
 .filters {
   gap: 12px;
   padding: 14px;
@@ -1373,7 +1319,6 @@ textarea:focus {
   border-radius: 10px;
 }
 
-/* ---------- Resource cards ---------- */
 .resource-grid {
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 16px;
@@ -1404,7 +1349,6 @@ textarea:focus {
   border-radius: 6px;
 }
 
-/* File type badge: each type has its own color, so it reads at a glance */
 .ftype {
   margin-left: auto;
   padding: 3px 8px;
@@ -1489,7 +1433,6 @@ textarea:focus {
   text-decoration: underline;
 }
 
-/* ---------- Trending: three ranked cards ---------- */
 .trending ol {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1543,7 +1486,6 @@ textarea:focus {
   color: var(--green);
 }
 
-/* ---------- Pop-ups ---------- */
 .modal-overlay {
   padding: 40px 14px;
   background: rgba(8, 10, 12, 0.66);
@@ -1619,7 +1561,6 @@ textarea:focus {
   border-radius: 10px;
 }
 
-/* ---------- Login page ---------- */
 .auth-box {
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -1630,7 +1571,6 @@ textarea:focus {
   font-family: var(--serif);
 }
 
-/* ---------- Footer ---------- */
 .site-footer {
   margin-top: 40px;
   background: transparent;
@@ -1645,7 +1585,6 @@ textarea:focus {
   font-size: 16px;
 }
 
-/* ---------- Phones ---------- */
 @media (max-width: 800px) {
   .site-header {
     height: auto;
@@ -1660,7 +1599,6 @@ textarea:focus {
   }
 }
 
-/* Respect people who turn animations off */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -1668,17 +1606,14 @@ textarea:focus {
   }
 }
 
-/* Login page: close (X) button and back link */
 .auth-box { position: relative; }
 a.modal-close { text-decoration: none; line-height: 1; }
 .auth-back { display: block; margin-top: 16px; text-align: center; font-size: 14px; color: var(--text-soft); text-decoration: none; }
 .auth-back:hover { color: var(--text); text-decoration: underline; }
 
-/* Long course names on a card: keep to one line and cut with ... */
 .card-top .course-tag { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-top .ftype, .card-top .st { flex-shrink: 0; }
 
-/* Preview of the file on each card */
 .card-preview { position: relative; display: block; height: 170px; margin: 0 0 12px; overflow: hidden; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); border-radius: 8px; }
 .card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .card-preview iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; pointer-events: none; }
@@ -1688,7 +1623,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
 .cp-file span { max-width: 100%; overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
 .cp-more { position: absolute; right: 8px; bottom: 8px; padding: 2px 8px; font-size: 11px; font-weight: bold; color: var(--text); background: rgba(0, 0, 0, 0.65); border-radius: 10px; }
 
-/* Excel files: file name on the left, a thumbnail of the sheet (with column letters and row numbers) on the right */
 .card-preview { color: inherit; text-decoration: none; }
 .card-preview.cp-attach { display: flex; height: 170px; background: var(--box); border-radius: 12px; }
 .cp-info { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 0 12px 0 14px; }
@@ -1710,7 +1644,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
 .xl-full .xl-grid { width: auto; table-layout: auto; }
 .xl-full .xl-grid td { max-width: 220px; }
 
-/* Several files in the details pop-up: arrows sit on top of the image / file, left and right */
 .pv-stage { position: relative; }
 .pv-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; padding: 0; margin-top: -10px; font-size: 24px; line-height: 1; color: #fff; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 50%; cursor: pointer; }
 .pv-prev { left: 14px; }
@@ -1722,10 +1655,8 @@ a.modal-close { text-decoration: none; line-height: 1; }
 .pv-track::-webkit-scrollbar { display: none; }
 .pv-track .pv-item { flex: 0 0 100%; min-width: 0; box-sizing: border-box; scroll-snap-align: start; }
 
-/* Card info lines: year and semester, program, then file info. The program stays on one line so every card has the same height of text. */
 .cw-prog { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* PowerPoint preview: first slide (saved thumbnail) or its text, with a slide count */
 .card-preview img.cp-slide { object-fit: contain; background: #0c0e0f; }
 .cp-slidetext { font-size: 13px; color: #222; background: #fff; }
 .cp-badge { position: absolute; left: 8px; bottom: 8px; padding: 2px 8px; font-size: 11px; font-weight: bold; color: #fff; background: rgba(0, 0, 0, 0.65); border-radius: 10px; }
@@ -1742,7 +1673,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   background: radial-gradient(circle, rgba(111, 184, 159, 0.14), transparent 68%);
 }
 
-/* a ring is a zero-size point at the centre that spins */
 .orbit-ring {
   position: absolute;
   left: 50%;
@@ -1752,7 +1682,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   animation: orbit var(--t) linear infinite;
 }
 
-/* the dashed track */
 .orbit-ring::before {
   content: "";
   position: absolute;
@@ -1767,7 +1696,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
 .ring-in  { --r: 76px;  --t: 9s; --size: 50px; }
 .ring-out { --r: 130px; --t: 14s; --size: 54px; animation-direction: reverse; }
 
-/* each icon sits at its angle on the track */
 .planet {
   position: absolute;
   left: 0;
@@ -1779,7 +1707,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   animation: planet-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) var(--d) both;
 }
 
-/* turn the opposite way so the icon always stays upright */
 .planet img {
   display: block;
   width: 100%;
@@ -1803,9 +1730,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   to   { opacity: 1; scale: 1; }
 }
 
-/* Your computer may have animations turned off (reduced motion), which the
-   rule near the end of this file honours by stopping everything. The orbit
-   is slow and gentle, so it keeps turning for those people. */
 @media (prefers-reduced-motion: reduce) {
   .card-stack .ring-in  { --t: 9s; animation: orbit var(--t) linear infinite !important; }
   .card-stack .ring-out { --t: 14s; animation: orbit var(--t) linear infinite reverse !important; }
@@ -1869,7 +1793,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   .sidebar:focus-within { left: 0; box-shadow: none; }
 }
 
-/* No green line on the edge of the sidebar */
 @media (min-width: 801px) {
   .sidebar { border-right: none; }
 }
@@ -1879,7 +1802,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
    STATISTICS POP-UP (charts drawn by Chart.js)
    ===================================================== */
 
-/* Wider pop-up so three charts sit side by side (keeps the pop-up short) */
 .modal.stats-wide { max-width: 1120px; }
 
 .chart-grid {
@@ -1902,7 +1824,6 @@ a.modal-close { text-decoration: none; line-height: 1; }
   font-size: 14px;
 }
 
-/* Chart.js needs a box with a set height to draw inside */
 .chart-box {
   position: relative;
   height: 170px;
@@ -2019,19 +1940,24 @@ a.modal-close { text-decoration: none; line-height: 1; }
   .modal.up-modal { padding: 20px 16px; }
 }
 
-/* YouTube player inside the details pop-up */
 .link-player { position: relative; width: 100%; aspect-ratio: 16 / 9; margin: 12px 0 0; overflow: hidden; background: #000; border-radius: 10px; }
 .link-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .link-player + .link-box { margin-top: 8px; }
 
-/* Drop-down menus: wide enough that long program names stay on ONE line, so the whole list fits without scrolling. */
 .dd-menu { max-width: min(560px, 92vw); max-height: min(440px, 70vh); scrollbar-width: thin; }
 .dd-opt { padding-top: 7px; padding-bottom: 7px; }
 
-/* Program and Major menu: shows 4 options at a time, scroll for the rest (4 x 36px + padding) */
 .dd-menu-program { max-height: 152px; scrollbar-width: thin; }
 .dd-menu-program .dd-opt { display: flex; align-items: center; min-height: 36px; box-sizing: border-box; padding-top: 4px; padding-bottom: 4px; }
 
-/* Hide the scroll bar in the drop-down menus. They still scroll with the mouse wheel, touch or the keyboard. */
 .dd-menu, .dd-menu-program { scrollbar-width: none; -ms-overflow-style: none; }
 .dd-menu::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+
+/* =====================================================
+   LOG IN / SIGN UP POP-UP: as narrow as the form, so the form sits in the middle
+   ===================================================== */
+
+.modal:has(.auth-box) {
+  max-width: 460px;
+}

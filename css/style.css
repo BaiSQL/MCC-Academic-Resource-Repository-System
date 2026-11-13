@@ -1,0 +1,2037 @@
+/* =====================================================
+   Academic Resource Repository System - styles
+   -----------------------------------------------------
+   1. Colors (dark)   5. Search area (hero)
+   2. Basic page settings       6. Filters
+   3. Buttons and form fields   7. Resource cards
+   4. Header + sidebar          8. Pop-up windows
+                                9. Footer
+   ===================================================== */
+
+
+/* =====================================================
+   1. COLORS
+   Change a color here and it changes everywhere.
+   ===================================================== */
+
+/* Dark theme (the only theme) */
+:root {
+  --page: #16181a;          /* page background */
+  --box: #1f2225;          /* cards, header, pop-ups */
+  --text: #e8e6e1;          /* main text */
+  --text-soft: #b5b3ab;     /* second-level text */
+  --muted: #9a9890;         /* small gray text */
+  --border: #34383c;        /* thin lines around boxes */
+  --border-dark: #44494e;   /* lines around buttons and inputs */
+  --hover: #2b2f33;         /* color when mouse is over a button */
+
+  --green: #6fb89f;         /* main brand color */
+  --green-dark: #8fd0b8;    /* green when mouse is over it */
+  --green-light: #24352f;   /* soft green background */
+  --on-green: #10201a;      /* text on top of green */
+
+  --danger: #ef8a85;        /* red: remove, rejected */
+  --warning: #f0a45a;       /* orange: pending */
+  --success: #6fcf97;       /* green: approved */
+  --highlight: #7a6420;     /* yellow marker in the headline */
+  --note-bg: #3a3420;       /* message box background */
+  --note-border: #6b5d2a;   /* message box border */
+
+  color-scheme: dark;       /* dark scrollbars and form controls */
+}
+
+/* =====================================================
+   2. BASIC PAGE SETTINGS
+   ===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+/* Anything with the "hidden" attribute is not shown */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--green);
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 6px 0 12px;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+h3 {
+  font-size: 17px;
+  margin: 6px 0;
+}
+
+/* Small gray text */
+.mut {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Page sections share the same side spacing */
+.hero-inner,
+.browse,
+.trending,
+.footer-inner {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+
+/* =====================================================
+   3. BUTTONS AND FORM FIELDS
+   ===================================================== */
+
+button {
+  font-size: 15px;
+  padding: 6px 12px;
+  color: var(--text);
+  background: var(--box);
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--hover);
+}
+
+/* Green buttons */
+.btn-upload,
+.btn-submit,
+button.p,
+.search-bar button {
+  color: var(--on-green);
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.btn-upload:hover,
+.btn-submit:hover,
+button.p:hover,
+.search-bar button:hover {
+  background: var(--green-dark);
+}
+
+/* Links that look like buttons (Log in / Sign up) */
+.btn-link,
+.btn-outline {
+  display: inline-block;
+  padding: 6px 12px;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.btn-link {
+  color: var(--on-green);
+  background: var(--green);
+}
+
+.btn-link:hover {
+  background: var(--green-dark);
+}
+
+.btn-outline {
+  color: var(--text);
+  border: 1px solid var(--border-dark);
+}
+
+.btn-outline:hover {
+  background: var(--hover);
+}
+
+/* Red text button (remove, report, suspend) */
+button.d {
+  color: var(--danger);
+}
+
+input,
+select,
+textarea {
+  font-size: 15px;
+  padding: 8px 10px;
+  color: var(--text);
+  background: var(--box);
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  max-width: 100%;
+}
+
+/* Outline when a button or field is selected with the keyboard */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+}
+
+/* Red number on the notification bell */
+.badge {
+  padding: 0 6px;
+  font-size: 12px;
+  color: var(--on-green);
+  background: var(--danger);
+  border-radius: 10px;
+}
+
+
+/* =====================================================
+   4. HEADER
+   Logo on the left, account buttons on the right.
+   (The page links are in the sidebar, section 4b.)
+   ===================================================== */
+
+.site-header {
+  height: 62px;
+  position: sticky;      /* stays at the top while scrolling */
+  top: 0;
+  z-index: 5;
+  background: var(--box);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  height: 100%;
+  padding: 0 24px;
+}
+
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.logo span {
+  color: var(--green);
+}
+
+/* Header logo = picture + title */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* "Academic Resource" is white; "Repository System" stays green (from .logo span above).
+   .logo .logo-text is more specific than .logo span, so the white wins. */
+.logo .logo-text {
+  color: #fff;
+}
+
+.logo-img {
+  width: 38px;
+  height: 38px;
+}
+
+.header-tools,
+.user-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =====================================================
+   4b. SIDEBAR
+   Only a thin green strip is visible on the left.
+   When the mouse comes close, the sidebar slides out.
+   ===================================================== */
+
+html {
+  scroll-padding-top: 76px;   /* links do not hide under the header */
+}
+
+/* Keeps the page content away from the thin strip */
+.layout {
+  padding-left: 14px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 62px;
+  bottom: 0;
+  left: -206px;               /* hidden, only 14px stays visible */
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 220px;
+  padding: 16px 12px;
+  overflow-y: auto;
+  background: var(--box);
+  border-right: 4px solid var(--green);
+  transition: left 0.2s;
+}
+
+/* Mouse over the strip: the sidebar slides out */
+.sidebar:hover,
+.sidebar:focus-within {
+  left: 0;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+.side-label {
+  margin: 10px 12px 4px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Every sidebar link and button looks the same */
+.sidebar a,
+.sidebar button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  text-align: left;
+  text-decoration: none;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: 6px;
+}
+
+.sidebar a:hover,
+.sidebar button:hover {
+  background: var(--hover);
+}
+
+/* The Upload button stays green */
+.sidebar .btn-upload {
+  margin: 8px 0;
+  text-align: center;
+  color: var(--on-green);
+  background: var(--green);
+}
+
+.sidebar .btn-upload:hover {
+  background: var(--green-dark);
+}
+
+/* Admin links stack under each other */
+.sidebar .user-nav {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+/* Page content takes the rest of the width */
+.content {
+  min-width: 0;
+}
+
+
+/* =====================================================
+   5. SEARCH AREA (HERO)
+   ===================================================== */
+
+.hero {
+  padding: 40px 0;
+}
+
+.hero-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.hero-text {
+  flex: 1 1 380px;
+  max-width: 700px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Yellow marker under "set of notes" */
+.highlight {
+  background: linear-gradient(transparent 60%, var(--highlight) 60%);
+}
+
+.hero-sub {
+  color: var(--text-soft);
+}
+
+.search-bar {
+  display: flex;
+  gap: 6px;
+  margin: 16px 0 8px;
+}
+
+.search-bar input {
+  flex: 1;
+}
+
+.hero-stats {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* The three tilted cards on the right */
+.card-stack {
+  position: relative;
+  width: 240px;
+  height: 200px;
+  margin-right: 30px;
+}
+
+.stack-card {
+  position: absolute;
+  width: 170px;
+  padding: 14px;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.stack-card p {
+  margin: 6px 0 0;
+  font-weight: bold;
+}
+
+.stack-tag {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--green);
+}
+
+.card-a { left: 0;    top: 20px; transform: rotate(-8deg); }
+.card-b { left: 40px; top: 50px; transform: rotate(2deg); }
+.card-c { left: 80px; top: 80px; transform: rotate(10deg); }
+
+
+/* =====================================================
+   6. FILTERS (Year, Program, Semester, Course, File type)
+   ===================================================== */
+
+.browse,
+.trending {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.section-label {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* One drop-down */
+.dd {
+  position: relative;
+  flex: 1;
+  min-width: 140px;
+}
+
+.dd-label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dd-btn {
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The list that opens. Long lists scroll inside it. */
+.dd-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 8;
+  width: max-content;
+  min-width: 100%;
+  max-width: 300px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 2px;
+  background: var(--box);
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dd-opt {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  text-align: left;
+  white-space: normal;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+.dd-opt:hover {
+  background: var(--hover);
+}
+
+/* The option that is currently chosen */
+.dd-opt.on {
+  font-weight: bold;
+  background: var(--green-light);
+}
+
+
+/* =====================================================
+   7. RESOURCE CARDS
+   ===================================================== */
+
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 14px;
+}
+
+.resource-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  padding: 14px;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.resource-card:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Folded corner at the top right */
+.card-fold {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 0 22px 22px 0;
+  border-color: transparent var(--page) var(--border) transparent;
+}
+
+.course-tag {
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 4px;
+}
+
+.card-desc {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--text-soft);
+  overflow-wrap: anywhere;   /* long words wrap instead of being cut off */
+}
+
+.card-meta,
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.card-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
+/* Upvote button after the person voted */
+.upvotes.on {
+  color: var(--on-green);
+  background: var(--green);
+  border-color: var(--green);
+}
+
+/* "No results" message */
+.empty-state,
+.empty {
+  padding: 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Status words: Pending, Approved, Rejected */
+.st {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.Pending  { color: var(--warning); }
+.Approved { color: var(--success); }
+.Rejected { color: var(--danger); }
+
+/* Trending list */
+.trending ol {
+  margin: 0;
+  padding: 12px 12px 12px 36px;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+
+/* =====================================================
+   8. POP-UP WINDOWS (upload, login, details, admin...)
+   ===================================================== */
+
+/* Dark background behind the pop-up */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 30px 12px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 22px;
+  background: var(--box);
+  border-radius: 10px;
+}
+
+/* Wider pop-up for details and admin pages */
+.modal.wide {
+  max-width: 640px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 20px;
+  background: none;
+  border: none;
+}
+
+/* Upload form fields */
+.field {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.field span {
+  display: block;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+}
+
+.field textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* Yellow message box */
+.modal-message,
+.note {
+  margin: 10px 0;
+  padding: 8px 10px;
+  background: var(--note-bg);
+  border: 1px solid var(--note-border);
+  border-radius: 6px;
+}
+
+/* File preview (inside the details pop-up) */
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 6px 0 10px;
+}
+
+/* One uploaded file: name + download on top, preview below */
+.pv-item {
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.pv-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pv-head button {
+  margin-left: auto;
+  padding: 2px 10px;
+  font-size: 13px;
+}
+
+.pv-body {
+  max-height: 400px;
+  overflow: auto;
+  padding: 8px;
+}
+
+/* Files chosen in the upload form (each can be removed before posting) */
+.picked {
+  margin: 0 0 10px;
+}
+
+.pk-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.pk-item.bad {
+  border-color: var(--danger);
+}
+
+.pk-item.bad .mut,
+.pk-warn {
+  color: var(--danger);
+}
+
+.pk-thumb,
+.pk-ext {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+}
+
+.pk-thumb {
+  object-fit: cover;
+}
+
+.pk-ext {
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--green);
+  background: var(--green-light);
+}
+
+.pk-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pk-remove {
+  flex: none;
+  padding: 0 9px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--danger);
+}
+
+.pk-sum {
+  margin: 2px 0 0;
+}
+
+/* Text that someone wrote in a post */
+.post-text {
+  max-height: 360px;
+  overflow: auto;
+  margin: 8px 0;
+  padding: 10px 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--page);
+  border-left: 3px solid var(--green);
+  border-radius: 4px;
+}
+
+.pv-img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.pv-frame {
+  display: block;
+  width: 100%;
+  height: 400px;
+  border: 0;
+  background: #ffffff;
+}
+
+.pv-text {
+  margin: 0;
+  font: 13px/1.5 Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.pv-doc {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* AI summary box */
+.sum {
+  margin: 8px 0;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: var(--page);
+  border-left: 3px solid var(--green);
+}
+
+/* A line of buttons or inputs */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.row.f input,
+.row.f select {
+  flex: 1;
+  min-width: 120px;
+}
+
+.sp {
+  justify-content: space-between;
+}
+
+/* One comment or list item */
+.cm {
+  padding: 6px 0;
+  font-size: 14px;
+  border-top: 1px solid var(--hover);
+}
+
+.tag {
+  padding: 1px 8px;
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid var(--border-dark);
+  border-radius: 10px;
+}
+
+
+/* =====================================================
+   LOGIN / SIGN UP PAGE
+   ===================================================== */
+
+.auth-page {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: var(--page);
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: 26px;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.auth-logo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 10px;
+}
+
+.auth-box h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.auth-box h2 span {
+  color: var(--green);
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.auth-tab {
+  flex: 1;
+}
+
+.auth-tab.on {
+  color: var(--on-green);
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.auth-box .btn-submit {
+  width: 100%;
+  padding: 10px;
+}
+
+.auth-demo {
+  margin: 16px 0 0;
+  text-align: center;
+}
+
+
+/* =====================================================
+   9. FOOTER
+   ===================================================== */
+
+.site-footer {
+  margin-top: 30px;
+  background: var(--box);
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.footer-logo {
+  margin: 0;
+  font-size: 18px;
+}
+
+.footer-text {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+
+/* =====================================================
+   SMALL SCREENS (phones)
+   ===================================================== */
+
+@media (max-width: 800px) {
+  .site-header {
+    height: auto;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px;
+  }
+
+  /* The sidebar becomes a row of buttons under the header */
+  .layout {
+    padding-left: 0;
+  }
+
+  .sidebar,
+  .sidebar:hover {
+    position: static;
+    left: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    padding: 8px 12px;
+    overflow: visible;
+    box-shadow: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar a,
+  .sidebar button {
+    width: auto;
+  }
+
+  .sidebar .user-nav {
+    flex-direction: row;
+  }
+
+  .side-label {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .card-stack {
+    display: none;
+  }
+}
+
+
+/* =====================================================
+   NOTIFICATION POP-UPS (bottom right)
+   ===================================================== */
+
+.toasts {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+}
+
+.toast {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--box);
+  border: 1px solid var(--green);
+  border-left-width: 4px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+/* Post details: text-only posts */
+.byline {
+  margin: -4px 0 12px;
+  font-size: 13px;
+}
+
+.post-text-main {
+  max-height: 480px;
+  padding: 14px 16px;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* Uploader names: bold and white so they stand out */
+.uploader,
+.uploader b,
+.byline b,
+.cm .mut b {
+  color: #fff;
+}
+
+/* Short look at a post's text inside the Moderation list */
+.post-peek {
+  max-height: 120px;
+  font-size: 14px;
+}
+
+/* Hide the scrollbars for a cleaner look (scrolling with mouse, touch and keyboard still works) */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* =====================================================
+   10. DESIGN REFRESH
+   Newer styles that sit on top of the sections above.
+   (A rule here wins over the same rule higher up.)
+   ===================================================== */
+
+/* ---------- Colors and fonts ---------- */
+:root {
+  --page: #131618;
+  --box: #1b1f22;
+  --raised: #22272b;
+  --border: #2c3236;
+  --border-dark: #3a4146;
+  --hover: #272d31;
+  --text: #ebe9e4;
+  --text-soft: #bdbbb3;
+  --muted: #9a9a92;
+  --highlight: rgba(111, 184, 159, 0.5);
+
+  --sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+}
+
+body {
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Buttons and fields ---------- */
+button {
+  padding: 7px 14px;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+button.p,
+.btn-submit,
+.btn-upload,
+.btn-link {
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+
+/* Keyboard focus ring; fields get a soft green glow instead */
+button:focus,
+a:focus {
+  outline: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(111, 184, 159, 0.2);
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  height: 64px;
+  background: rgba(27, 31, 34, 0.88);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+
+.header-tools button,
+.header-tools .btn-link,
+.header-tools .btn-outline {
+  padding: 7px 16px;
+  border-radius: 999px;
+}
+
+/* ---------- Sidebar ---------- */
+.side-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.sidebar a,
+.sidebar button {
+  border-radius: 10px;
+}
+
+.sidebar .btn-upload {
+  padding: 11px 12px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 32px 0 24px;
+}
+
+.hero-inner {
+  gap: 32px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--green);
+}
+
+.hero h1 {
+  margin: 8px 0 12px;
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.6vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  background: linear-gradient(transparent 84%, var(--highlight) 84%);
+}
+
+.hero-sub {
+  max-width: 56ch;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* One search field with the button inside it */
+.search-bar {
+  max-width: 520px;
+  gap: 6px;
+  margin: 18px 0 10px;
+  padding: 5px;
+  background: var(--box);
+  border: 1px solid var(--border-dark);
+  border-radius: 14px;
+}
+
+.search-bar:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(111, 184, 159, 0.2);
+}
+
+.search-bar input {
+  padding: 8px 12px;
+  font-size: 15px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.search-bar button {
+  padding: 0 22px;
+  border-radius: 10px;
+}
+
+.hero-stats {
+  margin: 0;
+}
+
+/* The three sample cards on the right */
+.card-stack {
+  width: 230px;
+  height: 190px;
+  margin-right: 30px;
+}
+
+.stack-card {
+  width: 150px;
+  padding: 10px 12px;
+  font-size: 13px;
+  background: var(--raised);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.card-a { left: 0;    top: 0;     transform: rotate(-5deg); }
+.card-b { left: 38px; top: 62px;  transform: rotate(1.5deg); }
+.card-c { left: 76px; top: 124px; transform: rotate(6deg); }
+
+/* ---------- Section titles ---------- */
+.browse,
+.trending {
+  padding-top: 24px;
+  padding-bottom: 28px;
+}
+
+.section-label {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--text);
+}
+
+.trending .section-label {
+  margin-bottom: 14px;
+}
+
+.section-heading {
+  margin-bottom: 14px;
+}
+
+/* ---------- Filters ---------- */
+.filters {
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+}
+
+.dd-label {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.dd-btn {
+  padding: 9px 12px;
+  border-radius: 10px;
+}
+
+.dd-menu {
+  padding: 4px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+
+.dd-opt {
+  border-radius: 8px;
+}
+
+#clearFilters {
+  padding: 9px 14px;
+  border-radius: 10px;
+}
+
+/* ---------- Resource cards ---------- */
+.resource-grid {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.resource-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border-radius: 14px;
+  transition: border-color 0.15s;
+}
+
+.resource-card:hover {
+  border-color: var(--green);
+  box-shadow: none;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.course-tag {
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+/* File type badge: each type has its own color, so it reads at a glance */
+.ftype {
+  margin-left: auto;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ft);
+  background: var(--ft-bg);
+  border-radius: 6px;
+}
+
+.ft-pdf   { --ft: #f19a94; --ft-bg: rgba(241, 154, 148, 0.14); }
+.ft-docx,
+.ft-doc   { --ft: #8fb8f0; --ft-bg: rgba(143, 184, 240, 0.14); }
+.ft-pptx  { --ft: #f2b277; --ft-bg: rgba(242, 178, 119, 0.14); }
+.ft-xlsx  { --ft: #82d0a0; --ft-bg: rgba(130, 208, 160, 0.14); }
+.ft-image { --ft: #c3a3ee; --ft-bg: rgba(195, 163, 238, 0.14); }
+.ft-text,
+.ft-txt,
+.ft-mixed { --ft: var(--text-soft); --ft-bg: rgba(255, 255, 255, 0.07); }
+
+.resource-card h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.card-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  margin: 0 0 14px;
+  line-height: 1.55;
+}
+
+.card-where {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.card-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.uploader b {
+  display: inline-block;
+  max-width: 130px;
+  overflow: hidden;
+  vertical-align: bottom;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.upvotes {
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.view-link {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.view-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Trending: three ranked cards ---------- */
+.trending ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  counter-reset: rank;
+  padding: 0;
+  list-style: none;
+  background: none;
+  border: none;
+}
+
+.trending li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 16px 16px 58px;
+  counter-increment: rank;
+  background: var(--box);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.trending li::before {
+  content: counter(rank);
+  position: absolute;
+  top: 10px;
+  left: 18px;
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.trending li.mut {
+  padding-left: 16px;
+}
+
+.trending li.mut::before {
+  display: none;
+}
+
+.trending li a {
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.trending li a:hover {
+  color: var(--green);
+}
+
+/* ---------- Pop-ups ---------- */
+.modal-overlay {
+  padding: 40px 14px;
+  background: rgba(8, 10, 12, 0.66);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  animation: pop-in 0.16s ease-out;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+
+.modal h2 {
+  margin-bottom: 14px;
+  padding-right: 30px;
+  font-family: var(--serif);
+  font-size: 26px;
+  letter-spacing: -0.01em;
+}
+
+.modal h3 {
+  margin: 20px 0 6px;
+  font-size: 16px;
+}
+
+.modal .eyebrow {
+  margin-bottom: 2px;
+}
+
+.modal-close {
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--text-soft);
+  border-radius: 50%;
+}
+
+.modal-close:hover {
+  background: var(--hover);
+}
+
+.modal input,
+.modal select,
+.modal textarea {
+  background: var(--page);
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field span {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.btn-submit {
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+/* ---------- Login page ---------- */
+.auth-box {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.auth-box h2 {
+  font-family: var(--serif);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 40px;
+  background: transparent;
+}
+
+.footer-inner {
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.footer-logo {
+  font-size: 16px;
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 800px) {
+  .site-header {
+    height: auto;
+  }
+
+  .hero {
+    padding: 24px 0 16px;
+  }
+
+  .dd {
+    min-width: 45%;
+  }
+}
+
+/* Respect people who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Login page: close (X) button and back link */
+.auth-box { position: relative; }
+a.modal-close { text-decoration: none; line-height: 1; }
+.auth-back { display: block; margin-top: 16px; text-align: center; font-size: 14px; color: var(--text-soft); text-decoration: none; }
+.auth-back:hover { color: var(--text); text-decoration: underline; }
+
+/* Long course names on a card: keep to one line and cut with ... */
+.card-top .course-tag { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-top .ftype, .card-top .st { flex-shrink: 0; }
+
+/* Preview of the file on each card */
+.card-preview { position: relative; display: block; height: 170px; margin: 0 0 12px; overflow: hidden; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); border-radius: 8px; }
+.card-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.card-preview iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; pointer-events: none; }
+.cp-text { height: 100%; padding: 10px 12px; overflow: hidden; font-size: 12px; line-height: 1.5; color: var(--text-soft); white-space: pre-wrap; word-break: break-word; }
+.cp-file { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 100%; padding: 0 12px; text-align: center; color: var(--text-soft); }
+.cp-file b { font-size: 20px; color: var(--green); }
+.cp-file span { max-width: 100%; overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.cp-more { position: absolute; right: 8px; bottom: 8px; padding: 2px 8px; font-size: 11px; font-weight: bold; color: var(--text); background: rgba(0, 0, 0, 0.65); border-radius: 10px; }
+
+/* Excel files: file name on the left, a thumbnail of the sheet (with column letters and row numbers) on the right */
+.card-preview { color: inherit; text-decoration: none; }
+.card-preview.cp-attach { display: flex; height: 170px; background: var(--box); border-radius: 12px; }
+.cp-info { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 0 12px 0 14px; }
+.cp-xl-icon { display: grid; place-items: center; width: 30px; height: 30px; margin-bottom: 6px; font-size: 16px; font-weight: bold; color: #fff; background: #1d7a46; border-radius: 7px; }
+.cp-info b { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; font-size: 14px; line-height: 1.3; color: var(--text); word-break: break-word; }
+.cp-info span { font-size: 12px; color: var(--text-soft); }
+.cp-info small { font-size: 11px; color: var(--muted); }
+.cp-thumb { position: relative; flex: 0 0 56%; overflow: hidden; background: #fff; border-left: 1px solid var(--border); }
+.cp-thumb::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to right, transparent 80%, rgba(255, 255, 255, 0.9)), linear-gradient(to bottom, transparent 82%, rgba(255, 255, 255, 0.95)); }
+.cp-scale { width: 400px; transform: scale(0.56); transform-origin: top left; }
+.xl-grid { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 12px; color: #222; background: #fff; }
+.xl-grid td { height: 20px; padding: 2px 6px; overflow: hidden; border: 1px solid #d9dde1; text-overflow: ellipsis; white-space: nowrap; }
+.xl-grid .xl-head td, .xl-grid .xl-rn { color: #555; text-align: center; background: #eef1f4; }
+.xl-grid .xl-head td { height: 18px; font-size: 11px; }
+.xl-grid .xl-rn { width: 26px; padding: 2px 0; font-size: 11px; }
+.xl-grid .xl-first td:not(.xl-rn) { font-weight: bold; background: #e6f2ec; }
+.xl-grid .xl-num { text-align: right; }
+.xl-full { overflow: auto; }
+.xl-full .xl-grid { width: auto; table-layout: auto; }
+.xl-full .xl-grid td { max-width: 220px; }
+
+/* Several files in the details pop-up: arrows sit on top of the image / file, left and right */
+.pv-stage { position: relative; }
+.pv-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; padding: 0; margin-top: -10px; font-size: 24px; line-height: 1; color: #fff; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 50%; cursor: pointer; }
+.pv-prev { left: 14px; }
+.pv-next { right: 26px; }
+.pv-arrow:hover:not(:disabled) { background: var(--green); color: var(--on-green); border-color: var(--green); }
+.pv-arrow:disabled { opacity: 0.3; cursor: default; }
+.pv-count { position: absolute; bottom: 14px; left: 50%; z-index: 2; transform: translateX(-50%); padding: 2px 12px; font-size: 12px; font-weight: bold; color: #fff; background: rgba(0, 0, 0, 0.65); border-radius: 12px; pointer-events: none; }
+.pv-track { display: flex; align-items: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pv-track::-webkit-scrollbar { display: none; }
+.pv-track .pv-item { flex: 0 0 100%; min-width: 0; box-sizing: border-box; scroll-snap-align: start; }
+
+/* Card info lines: year and semester, program, then file info. The program stays on one line so every card has the same height of text. */
+.cw-prog { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* PowerPoint preview: first slide (saved thumbnail) or its text, with a slide count */
+.card-preview img.cp-slide { object-fit: contain; background: #0c0e0f; }
+.cp-slidetext { font-size: 13px; color: #222; background: #fff; }
+.cp-badge { position: absolute; left: 8px; bottom: 8px; padding: 2px 8px; font-size: 11px; font-weight: bold; color: #fff; background: rgba(0, 0, 0, 0.65); border-radius: 10px; }
+
+/* =====================================================
+   HERO ORBIT: the six file types circling the centre
+   inner ring turns clockwise, outer ring turns the
+   other way and slower. Hover pauses it.
+   ===================================================== */
+.card-stack {
+  width: 320px;
+  height: 320px;
+  margin-right: 20px;
+  background: radial-gradient(circle, rgba(111, 184, 159, 0.14), transparent 68%);
+}
+
+/* a ring is a zero-size point at the centre that spins */
+.orbit-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  animation: orbit var(--t) linear infinite;
+}
+
+/* the dashed track */
+.orbit-ring::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--r) * -1);
+  top: calc(var(--r) * -1);
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  border: 1.5px dashed var(--border-dark);
+  border-radius: 50%;
+}
+
+.ring-in  { --r: 76px;  --t: 9s; --size: 50px; }
+.ring-out { --r: 130px; --t: 14s; --size: 54px; animation-direction: reverse; }
+
+/* each icon sits at its angle on the track */
+.planet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1));
+  animation: planet-in 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) var(--d) both;
+}
+
+/* turn the opposite way so the icon always stays upright */
+.planet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+  animation: orbit var(--t) linear infinite reverse;
+}
+.ring-out .planet img { animation-direction: normal; }
+
+.card-stack:hover .orbit-ring,
+.card-stack:hover .planet img {
+  animation-play-state: paused;
+}
+
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes planet-in {
+  from { opacity: 0; scale: 0.3; }
+  to   { opacity: 1; scale: 1; }
+}
+
+/* Your computer may have animations turned off (reduced motion), which the
+   rule near the end of this file honours by stopping everything. The orbit
+   is slow and gentle, so it keeps turning for those people. */
+@media (prefers-reduced-motion: reduce) {
+  .card-stack .ring-in  { --t: 9s; animation: orbit var(--t) linear infinite !important; }
+  .card-stack .ring-out { --t: 14s; animation: orbit var(--t) linear infinite reverse !important; }
+  .card-stack .ring-in .planet img  { animation: orbit var(--t) linear infinite reverse !important; }
+  .card-stack .ring-out .planet img { animation: orbit var(--t) linear infinite !important; }
+  .card-stack:hover .orbit-ring,
+  .card-stack:hover .planet img { animation-play-state: paused !important; }
+}
+
+
+/* =====================================================
+   RESOURCE GRID: 4 columns, 2 rows per page
+   (fewer columns on smaller screens), plus page numbers
+   ===================================================== */
+.resource-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1400px) { .resource-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { .resource-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 650px)  { .resource-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.browse { scroll-margin-top: 80px; }
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 28px 0 8px;
+}
+.pager:empty { display: none; }
+
+.pg-btn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border-dark);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.pg-btn:hover:not(:disabled) { border-color: var(--green); color: var(--green); }
+.pg-btn.on { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.pg-btn:disabled { opacity: 0.4; cursor: default; }
+.pg-gap { padding: 0 4px; color: var(--muted); }
+
+
+/* =====================================================
+   SIDEBAR ALWAYS VISIBLE (desktop)
+   The menu stays open on the left and the page content
+   sits next to it, so nothing is covered. On small
+   screens it is still the row of buttons under the header.
+   ===================================================== */
+@media (min-width: 801px) {
+  .layout { padding-left: 220px; }
+  .sidebar,
+  .sidebar:hover,
+  .sidebar:focus-within { left: 0; box-shadow: none; }
+}
+
+/* No green line on the edge of the sidebar */
+@media (min-width: 801px) {
+  .sidebar { border-right: none; }
+}
+
+
+/* =====================================================
+   STATISTICS POP-UP (charts drawn by Chart.js)
+   ===================================================== */
+
+/* Wider pop-up so three charts sit side by side (keeps the pop-up short) */
+.modal.stats-wide { max-width: 1120px; }
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.chart-card {
+  min-width: 0;
+  padding: 10px 12px 12px;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.chart-card h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+/* Chart.js needs a box with a set height to draw inside */
+.chart-box {
+  position: relative;
+  height: 170px;
+}
+
+@media (max-width: 960px) {
+  .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .chart-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+/* =====================================================
+   ONLINE / OFFLINE DOT (Users list, admin only)
+   green = online, red = offline
+   ===================================================== */
+
+.dot {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+.dot.on {
+  background: #3fcf7e;
+  box-shadow: 0 0 0 3px rgba(63, 207, 126, 0.22);
+}
+
+.dot.off {
+  background: #e5534b;
+}
+
+
+/* =====================================================
+   STATISTICS: time filter and summary tiles
+   ===================================================== */
+
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stats-bar p {
+  margin: 0;
+}
+
+.stats-bar select {
+  margin-left: 6px;
+  padding: 7px 10px;
+  font-size: 14px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stat-tile {
+  padding: 8px 12px;
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.stat-tile b {
+  display: block;
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--green);
+}
+
+.stat-tile span {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+@media (max-width: 700px) {
+  .stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* =====================================================
+   LINK POSTS (YouTube or any website)
+   ===================================================== */
+.ft-link { --ft: #f0d58a; --ft-bg: rgba(240, 213, 138, 0.14); }
+.cp-play { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 46px; height: 32px; margin: -16px 0 0 -23px; font-size: 15px; color: #fff; background: rgba(0, 0, 0, 0.72); border-radius: 10px; pointer-events: none; }
+.link-box { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 12px 0; padding: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); border-radius: 10px; }
+.link-thumb { position: relative; flex: 0 0 160px; height: 90px; overflow: hidden; border-radius: 8px; }
+.link-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.link-info { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; }
+.link-info a { overflow: hidden; color: var(--green); text-overflow: ellipsis; white-space: nowrap; }
+
+/* =====================================================
+   UPLOAD FORM: wider pop-up, two columns, so it needs
+   far less scrolling. One column on small screens.
+   ===================================================== */
+.modal.up-modal { max-width: 700px; padding: 24px 28px; }
+.up-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.up-grid > .field { min-width: 0; margin-bottom: 12px; }
+.up-grid > .field.full,
+.up-grid > :not(.field) { grid-column: 1 / -1; }
+.up-grid .field textarea { min-height: 76px; max-height: 220px; }
+@media (max-width: 600px) {
+  .up-grid { grid-template-columns: 1fr; }
+  .modal.up-modal { padding: 20px 16px; }
+}
+
+/* YouTube player inside the details pop-up */
+.link-player { position: relative; width: 100%; aspect-ratio: 16 / 9; margin: 12px 0 0; overflow: hidden; background: #000; border-radius: 10px; }
+.link-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.link-player + .link-box { margin-top: 8px; }
+
+/* Drop-down menus: wide enough that long program names stay on ONE line, so the whole list fits without scrolling. */
+.dd-menu { max-width: min(560px, 92vw); max-height: min(440px, 70vh); scrollbar-width: thin; }
+.dd-opt { padding-top: 7px; padding-bottom: 7px; }
+
+/* Program and Major menu: shows 4 options at a time, scroll for the rest (4 x 36px + padding) */
+.dd-menu-program { max-height: 152px; scrollbar-width: thin; }
+.dd-menu-program .dd-opt { display: flex; align-items: center; min-height: 36px; box-sizing: border-box; padding-top: 4px; padding-bottom: 4px; }
+
+/* Hide the scroll bar in the drop-down menus. They still scroll with the mouse wheel, touch or the keyboard. */
+.dd-menu, .dd-menu-program { scrollbar-width: none; -ms-overflow-style: none; }
+.dd-menu::-webkit-scrollbar { display: none; width: 0; height: 0; }

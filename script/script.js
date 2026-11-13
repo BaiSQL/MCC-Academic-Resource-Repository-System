@@ -1,4 +1,4 @@
-// Academic Resource Repository System - prototype script.js
+// Academic Resource Repository System -
 
 // ========== COURSE DATA (edit this part to add courses) ==========
 // curriculum.js - years, semesters, programs and the courses of each program.
@@ -818,7 +818,7 @@ function showLoginPrompt(action) {
 
 // ---------- Log in / Sign up pop-up ----------
 // Same accounts and password scheme as login.js, so both ways of logging in work together.
-const ADMIN_EMAILS = ['admin@school.edu'];   // these emails become Administrators when they sign up
+const ADMIN_EMAILS = ['admin@arpsmcc.com'];   // these emails become Administrators when they sign up
 async function hashText(text) {
   if (!window.crypto || !crypto.subtle) return btoa(unescape(encodeURIComponent(text)));
   const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)));

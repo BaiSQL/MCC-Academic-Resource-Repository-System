@@ -1,10 +1,6 @@
-// Academic Resource Repository System -
+// Academic Resource Repository System - prototype script.js
 
 // ========== COURSE DATA (edit this part to add courses) ==========
-// curriculum.js - years, semesters, programs and the courses of each program.
-// To add more courses: find the program, year and semester below, then add a line like
-//   ['CC100', 'Introduction to Computing'],
-// (a program without courses yet simply shows no course list; uploads can still use "General").
 
 const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 const SEMESTERS = ['1st Semester', '2nd Semester'];
@@ -23,7 +19,6 @@ const PROGRAMS = [
   'Bachelor of Business Administration - Marketing Management'
 ];
 
-// CURRICULUM[program][year][semester] = list of [subject code, descriptive title]
 const CURRICULUM = {
   [BSIT]: {
     '1st Year': {
@@ -51,35 +46,25 @@ const CURRICULUM = {
 };
 
 // ========== APP ==========
-// The page design + the system features (accounts, upload, duplicate check,
-// ratings, comments, reports, moderation, notifications, activity, AI summary).
-// Data is kept in the browser (localStorage). Later this becomes PHP + MySQL.
 
 const KEY = 'ars_v3';
-const MAX_SIZE = 100 * 1024 * 1024;   // 100 MB for each file (big files are kept in the browser's IndexedDB; with PHP/MySQL the limit moves to php.ini)
-const MAX_FILES = 10;                // files in one post
-const MAX_TOTAL = 300 * 1024 * 1024; // 300 MB for all files of one post
-// Short name of a program for the cards, e.g. 'BSEd · English'
+const MAX_SIZE = 100 * 1024 * 1024;
+const MAX_FILES = 10;
+const MAX_TOTAL = 300 * 1024 * 1024;
 const progShort = p => p.replace('Bachelor of Information Technology', 'BSIT').replace('Bachelor of Industrial Technology - ', 'BIndTech · ').replace('Bachelor of Elementary Education - ', 'BEEd · ').replace('Bachelor of Secondary Education - ', 'BSEd · ').replace('Bachelor of Business Administration - ', 'BSBA · ');
-// File types people can upload (uploads from older versions, like TXT, still open fine)
 const TYPES = { pdf: 'PDF', docx: 'DOCX', doc: 'DOC', png: 'Image', jpg: 'Image', jpeg: 'Image', pptx: 'PPTX', xlsx: 'XLSX' };
-const TYPE_LIST = ['PDF', 'DOCX', 'DOC', 'Image', 'PPTX', 'XLSX', 'Link'];   // always shown in the File type filter
+const TYPE_LIST = ['PDF', 'DOCX', 'DOC', 'Image', 'PPTX', 'XLSX', 'Link'];
 
 // ---------- Data ----------
 function seedData() {
-  // No sample resources: the list starts empty and only fills up with real uploads.
-  // No sample users either: every account comes from the Sign up page.
   return { meId: null, nextId: 20, notifs: [], log: [], res: [], users: [] };
 }
-// Removes the old sample resources and sample users (they have no email) that earlier versions saved in this browser
-// Old program names saved in this browser -> new names
 const OLD_PROGRAMS = { 'BEEd – Major in General Content': 'Bachelor of Elementary Education - General Content', 'BSEd – Major in English': 'Bachelor of Secondary Education - English', 'BSEd – Major in Filipino': 'Bachelor of Secondary Education - Filipino', 'BSEd – Major in Mathematics': 'Bachelor of Secondary Education - Mathematics', 'BSBA – Major in Human Resource Management': 'Bachelor of Business Administration - Human Resource Management', 'BSBA – Major in Marketing Management': 'Bachelor of Business Administration - Marketing Management', 'BIndTech – Major in Computer Technology': 'Bachelor of Industrial Technology - Computer Technology', 'BIndTech – Major in Electronics Technology': 'Bachelor of Industrial Technology - Electronics Technology', 'BSIT – Bachelor of Science in Information Technology': 'Bachelor of Information Technology' };
 const dropSamples = d => { d.res = (d.res || []).filter(r => !String(r.hash).startsWith('seed')); d.res.forEach(r => { if (OLD_PROGRAMS[r.program]) r.program = OLD_PROGRAMS[r.program]; }); d.users = (d.users || []).filter(u => u.email); return d; };
 function loadData() { try { return dropSamples(Object.assign(seedData(), JSON.parse(localStorage.getItem(KEY)))); } catch (e) { return seedData(); } }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { alert('Browser storage is full.'); } }
 
 let S = loadData();
-// Each browser tab remembers its own logged-in person, so two accounts can be tried side by side
 try { const m = sessionStorage.getItem('ars_me'); if (m !== null) S.meId = m ? Number(m) : null; else if (S.meId) sessionStorage.setItem('ars_me', S.meId); } catch (e) {}
 let UI = { q: '', year: '', program: '', sem: '', course: '', type: '', sort: 'new', page: 1, view: null, vid: null, note: '', shown: {} };
 
@@ -91,14 +76,11 @@ const isAdmin = () => me() && me().role === 'admin';
 const userName = id => (S.users.find(u => u.id === id) || { name: 'Unknown' }).name;
 const findRes = id => S.res.find(r => r.id === Number(id));
 const count = r => r.base + r.votes.length;
-// The files of a post. Posts saved by older versions have just one file in r.data.
 const filesOf = r => r.files || (r.data ? [{ name: r.fileName || r.title, type: r.type, data: r.data, size: parseInt(r.meta) || 0 }] : []);
-const kindsOf = r => r.kinds || [r.type];   // file types in a post (used by the File type filter)
+const kindsOf = r => r.kinds || [r.type];
 
-// The description of a post, or '' when the uploader wrote none (old posts saved "No description." - treated as empty too)
 const descOf = r => !r.desc || r.desc === 'No description.' ? '' : r.desc;
 
-// When a post was uploaded, e.g. "Nov 13, 2026 · 10:27 AM" (posts saved before this had only a date, so just that is shown)
 const whenOf = r => {
   if (!r.at) return r.date || '';
   const d = new Date(r.at);
@@ -106,11 +88,10 @@ const whenOf = r => {
 };
 
 // ----- Links (YouTube or any website) -----
-// cleanLink: '' = nothing typed, null = not a usable web address, otherwise the cleaned address. Only http(s) is allowed.
 function cleanLink(s) {
   s = String(s || '').trim();
   if (!s) return '';
-  if (!/^[a-z][a-z0-9+.-]*:/i.test(s)) s = 'https://' + s;   // "youtube.com/..." works too
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(s)) s = 'https://' + s;
   try {
     const u = new URL(s);
     return /^https?:$/.test(u.protocol) && u.hostname.includes('.') && u.href.length <= 500 ? u.href : null;
@@ -128,12 +109,10 @@ function youtubeId(url) {
   } catch (e) { return ''; }
 }
 const ytThumb = id => `<img src="https://i.ytimg.com/vi/${esc(id)}/hqdefault.jpg" alt="" loading="lazy"><span class="cp-play">&#9654;</span>`;
-// Card preview for a post that has a link but no files: YouTube thumbnail, or the website name
 const linkCardHtml = r => {
   const url = linkOf(r), id = youtubeId(url);
   return `<a href="#" class="card-preview" data-a="view" data-v="${r.id}" aria-label="Open ${esc(r.title)}">${id ? ytThumb(id) : `<div class="cp-file"><b>Link</b><span>${esc(linkHost(url))}</span></div>`}</a>`;
 };
-// Link in the details pop-up: a YouTube link plays right here in the YouTube player; any other link opens in a new tab.
 const linkBlockHtml = url => {
   const id = youtubeId(url);
   const player = id ? `<div class="link-player"><iframe src="https://www.youtube-nocookie.com/embed/${esc(id)}?rel=0" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>` : '';
@@ -144,7 +123,6 @@ const addLog = t => { S.log.unshift({ u: S.meId, t, d: new Date().toLocaleString
 const notify = (uid, t) => S.notifs.unshift({ uid, t, d: new Date().toLocaleString(), read: false });
 const notifyAdmins = t => S.users.filter(u => u.role === 'admin').forEach(u => notify(u.id, t));
 
-// Simple "AI": keeps the 3 sentences that use the most frequent words.
 function summarize(text) {
   const sentences = text.replace(/\s+/g, ' ').match(/[^.!?]+[.!?]/g) || [text];
   const freq = {};
@@ -153,7 +131,7 @@ function summarize(text) {
   return scored.sort((a, b) => b.n - a.n).slice(0, 3).sort((a, b) => a.i - b.i).map(x => sentences[x.i].trim()).join(' ');
 }
 async function fileHash(file) {
-  if (!window.crypto || !crypto.subtle) return file.name + file.size; // fallback when not on localhost
+  if (!window.crypto || !crypto.subtle) return file.name + file.size;
   const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()));
   return [...bytes].map(b => b.toString(16).padStart(2, '0')).join('');
 }
@@ -162,15 +140,12 @@ const readDataURL = file => new Promise(ok => { const r = new FileReader(); r.on
 // ---------- Drawing the page ----------
 function renderNav() {
   const unread = S.notifs.filter(n => n.uid === S.meId && !n.read).length;
-  // For admins: posts waiting for approval + approved posts that were reported (the same two lists as in Moderation)
   const toReview = S.res.filter(r => r.status === 'Pending' || (r.flags.length && r.status === 'Approved')).length;
-  // Right side of the header: guests see Log in / Sign up, members see bell + name + log out
   $('#userNav').innerHTML = me()
     ? `<button data-a="open" data-v="notifs">🔔${unread ? ` <span class="badge">${unread}</span>` : ''}</button>
        <button data-a="open" data-v="profile">${esc(me().name)}</button>
        <button data-a="out">Log out</button>`
     : '<a class="btn-link" href="login.html" data-a="auth" data-v="login">Log in</a><a class="btn-outline" href="login.html?tab=signup" data-a="auth" data-v="signup">Sign up</a>';
-  // Sidebar: admin-only links
   $('#adminNav').innerHTML = isAdmin()
     ? '<span class="side-label">Admin</span>' +
       `<button data-a="open" data-v="admin" title="Moderation">Moderation${toReview ? ` <span class="badge">${toReview}</span>` : ''}</button>` +
@@ -178,14 +153,12 @@ function renderNav() {
       '<button data-a="open" data-v="stats" title="Statistics">Statistics</button>' +
       '<button data-a="open" data-v="users" title="Users">Users</button>'
     : '';
-  // Sidebar: students get a Pending link, with the number of their posts that are waiting for approval
   const waiting = S.res.filter(r => r.by === S.meId && r.status === 'Pending').length;
   $('#memberNav').hidden = !me() || isAdmin();
   $('#memberNav').innerHTML = `<button data-a="open" data-v="pending" title="Pending posts">Pending${waiting ? ` <span class="badge">${waiting}</span>` : ''}</button>`;
 }
 
 // ---------- Reading Excel (.xlsx) files: first rows of the first sheet ----------
-// An .xlsx is a zip of XML files. This reads just the cells we need for the preview.
 async function zipRead(blob, wanted, asBytes) {
   const out = {}, tailLen = Math.min(blob.size, 65557);
   const tail = new Uint8Array(await blob.slice(blob.size - tailLen).arrayBuffer()), tdv = new DataView(tail.buffer);
@@ -212,7 +185,6 @@ async function zipRead(blob, wanted, asBytes) {
   return out;
 }
 const xmlText = t => t.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
-// Returns the top-left corner of the first sheet as rows of text: [['Name', 'Score'], ['Ana', '90'], ...]
 async function xlsxGrid(blob, maxRows, maxCols) {
   const files = await zipRead(blob, nm => nm === 'xl/sharedStrings.xml' || /^xl\/worksheets\/sheet\d+\.xml$/.test(nm));
   const sheetName = Object.keys(files).filter(k => k.includes('worksheets')).sort((a, b) => parseInt(a.match(/\d+/)[0]) - parseInt(b.match(/\d+/)[0]))[0];
@@ -240,7 +212,7 @@ async function xlsxGrid(blob, maxRows, maxCols) {
   const cols = Math.max(0, ...rows.map(r => r.length));
   if (!rows.length || !cols) throw new Error('empty sheet');
   const out = rows.map(r => Array.from({ length: cols }, (_, i) => r[i] || ''));
-  if (dim) out.dim = { rows: Number(dim[4] || dim[2]) - Number(dim[2]) + 1, cols: colNum(dim[3] || dim[1]) - colNum(dim[1]) + 1 };   // size of the whole sheet
+  if (dim) out.dim = { rows: Number(dim[4] || dim[2]) - Number(dim[2]) + 1, cols: colNum(dim[3] || dim[1]) - colNum(dim[1]) + 1 };
   return out;
 }
 const colName = i => { let n = i + 1, t = ''; while (n > 0) { t = String.fromCharCode(65 + (n - 1) % 26) + t; n = Math.floor((n - 1) / 26); } return t; };
@@ -262,7 +234,6 @@ async function pptxPreview(blob) {
   return { thumb, text, slides };
 }
 // ---------- Preview on each card ----------
-// Shows what the file looks like (photo, first page of a PDF, start of a document), filled in when the card scrolls into view.
 let cardUrls = [], cardWatcher = null;
 function watchCardPreviews() {
   if (cardWatcher) cardWatcher.disconnect();
@@ -276,7 +247,6 @@ function watchCardPreviews() {
 async function fillCardPreview(box) {
   const r = findRes(Number(box.dataset.pv)), files = r ? filesOf(r) : [];
   if (!files.length) return box.remove();
-  // Prefer a photo, then a PDF, then a Word file, then whatever is first
   const f = files.find(x => x.type === 'Image') || files.find(x => x.type === 'PDF') || files.find(x => x.type === 'DOCX') || files.find(x => x.type === 'XLSX') || files.find(x => x.type === 'PPTX') || files[0];
   let html = '';
   try {
@@ -297,7 +267,6 @@ async function fillCardPreview(box) {
       else html = `<div class="cp-text cp-slidetext">${esc(p.text.slice(0, 400))}</div>${tag}`;
     }
     else if (f.type === 'XLSX') {
-      // Like an e-mail attachment: file name on the left, a thumbnail of the sheet on the right
       if (f.size > 15 * 1024) throw new Error('too big to read here');
       const grid = await xlsxGrid(await fileBlob(f), 16, 6);
       const size = grid.dim ? `<small>${grid.dim.rows} row${grid.dim.rows === 1 ? '' : 's'} &middot; ${grid.dim.cols} column${grid.dim.cols === 1 ? '' : 's'}</small>` : '';
@@ -305,13 +274,12 @@ async function fillCardPreview(box) {
       box.classList.add('cp-attach');
     }
   } catch (e) { html = ''; }
-  if (!box.isConnected) return;   // the list was redrawn meanwhile
+  if (!box.isConnected) return;
   if (!html) html = `<div class="cp-file"><b>${esc(f.type)}</b><span>${esc(f.name)}</span></div>`;
   if (files.length > 1) html += `<span class="cp-more">+${files.length - 1} more</span>`;
   box.innerHTML = html;
 }
 
-// Full course name for a card, e.g. 'RIZAL – Life and Works of Rizal' (typed courses are shown as typed)
 const courseLabel = c => { const f = coursesFor('', '', '').find(x => x[0] === c); return f ? f[0] + ' – ' + f[1] : c; };
 
 function cardHtml(r) {
@@ -326,12 +294,10 @@ function cardHtml(r) {
       <a href="#" class="view-link" data-a="view" data-v="${r.id}">View</a></span></div></article>`;
 }
 
-// Paging: 2 rows per page, with as many columns as the grid is showing (at most 4)
 const ROWS_PER_PAGE = 2;
 let lastGridKey = null, lastCols = 0;
 const gridCols = () => Math.max(1, getComputedStyle($('#resourceGrid')).gridTemplateColumns.split(' ').length);
 
-// Page buttons: Prev 1 2 3 ... Next
 function renderPager(pages) {
   const box = $('#pager'), p = UI.page, nums = [];
   if (pages < 2) { box.innerHTML = ''; return; }
@@ -354,7 +320,6 @@ function renderGrid() {
     .filter(r => !q || [r.title, r.year, r.program, r.sem, r.course, r.type, descOf(r), r.tags.join(' '), r.text || '', filesOf(r).map(f => f.name).join(' '), linkOf(r)].join(' ').toLowerCase().includes(q))
     .sort((a, b) => UI.sort === 'top' ? count(b) - count(a) : b.date.localeCompare(a.date) || b.id - a.id);
   cardUrls.forEach(u => URL.revokeObjectURL(u)); cardUrls = [];
-  // A new search, filter or sort starts again at page 1
   const key = [UI.q, UI.year, UI.program, UI.sem, UI.course, UI.type, UI.sort].join('|');
   if (key !== lastGridKey) { UI.page = 1; lastGridKey = key; }
   lastCols = gridCols();
@@ -374,17 +339,15 @@ function renderGrid() {
 }
 
 // ---------- Filters: Year, Program, Semester, File type ----------
-// Courses of the chosen year / program / semester (empty choice = any)
 function coursesFor(year, program, sem) {
   const found = {};
   Object.keys(CURRICULUM).filter(p => !program || p === program).forEach(p =>
     YEARS.filter(y => !year || y === year).forEach(y =>
       SEMESTERS.filter(s => !sem || s === sem).forEach(s =>
         ((CURRICULUM[p][y] || {})[s] || []).forEach(c => found[c[0]] = c[1]))));
-  return Object.entries(found); // [[code, title], ...]
+  return Object.entries(found);
 }
 
-// One drop-down. The menu has a max height, so long lists scroll.
 function dropdown(id, label, all, options, current) {
   const shown = (options.find(o => o[0] === current) || [0, all])[1];
   return `<div class="dd"><span class="dd-label">${label}</span>
@@ -398,7 +361,7 @@ const closeMenus = () => document.querySelectorAll('.dd-menu').forEach(m => m.hi
 
 function renderFilters() {
   const visible = S.res.filter(r => r.status === 'Approved');
-  const types = [...new Set([...TYPE_LIST, ...visible.flatMap(kindsOf)])].filter(t => t !== 'Text').map(t => [t, t]);   // no "Text" choice: posts are a link and/or files now
+  const types = [...new Set([...TYPE_LIST, ...visible.flatMap(kindsOf)])].filter(t => t !== 'Text').map(t => [t, t]);
   $('#filterBar').innerHTML =
     dropdown('year', 'Year', 'All years', YEARS.map(y => [y, y]), UI.year) +
     dropdown('program', 'Program and Major', 'All programs and majors', PROGRAMS.map(p => [p, p]), UI.program) +
@@ -413,7 +376,6 @@ function clearFilters() {
   renderFilters(); renderGrid();
 }
 
-// Upload form: nothing is pre-selected. The person picks Year, Program, Semester, then types the Course code and title.
 function fillUploadForm() {
   if ($('#upYear').children.length) return;
   const opts = (label, list) => `<option value="">${label}</option>` + list.map(x => `<option>${esc(x)}</option>`).join('');
@@ -423,7 +385,7 @@ function fillUploadForm() {
 }
 
 function renderTrend() {
-  if (!$('#trendList')) return;   // safe to skip if the Trending list is not on the page
+  if (!$('#trendList')) return;
   const top = S.res.filter(r => r.status === 'Approved').sort((a, b) => count(b) - count(a)).slice(0, 3);
   $('#trendList').innerHTML = !top.length ? '<li class="mut" style="list-style:none">No uploads yet.</li>' : top.map(r => `<li><a href="#" data-a="view" data-v="${r.id}">${esc(r.title)}</a> <span class="mut">${esc(r.course)} &middot; ▲ ${count(r)}</span></li>`).join('');
 }
@@ -435,12 +397,11 @@ function detailView(r) {
   const canRemove = isAdmin() || r.by === S.meId;
   const files = filesOf(r), textOnly = !files.length, link = linkOf(r);
   const words = r.text ? r.text.trim().split(/\s+/).length : 0;
-  // When nobody typed a description, it is just a copy of the post, so only show it if it adds something
   const dupDesc = r.text && (r.desc === r.text || r.desc === r.text.slice(0, 120) + '…');
   const meta = textOnly && link ? `Link &middot; ${esc(linkHost(link))}` : textOnly
     ? `Text post &middot; ${words} word${words === 1 ? '' : 's'}${words > 150 ? ` &middot; ${Math.round(words / 200) || 1} min read` : ''}`
     : `${r.type} &middot; ${esc(r.meta).replace(/^1 words/, '1 word')}`;
-  const showAi = !textOnly || words >= 40;   // a summary of a one-line post is pointless
+  const showAi = !textOnly || words >= 40;
   return `<span class="course-tag">${esc(r.course)}</span> <span class="st ${r.status}">${r.status}</span>
     <h2>${esc(r.title)}</h2>
     <p class="mut byline"><b>${esc(userName(r.by))}</b> &middot; ${esc(whenOf(r))}</p>
@@ -474,7 +435,6 @@ function notifsView() {
 function adminView() {
   const pending = S.res.filter(r => r.status === 'Pending');
   const flagged = S.res.filter(r => r.flags.length && r.status === 'Approved');
-  // Each row shows what the person is trying to post, so the admin can judge it before approving
   const row = r => {
     const files = filesOf(r);
     const dupDesc = r.text && (r.desc === r.text || r.desc === r.text.slice(0, 120) + '…');
@@ -496,9 +456,6 @@ function logView() {
 }
 
 // ---------- Who is online ----------
-// Every open tab of a logged-in person writes "I am here" (the time) into the browser every 20 seconds.
-// A person counts as online if one of their tabs checked in during the last 2 minutes.
-// Logging out or closing the tab clears it right away. (This works for tabs of the same browser; with PHP + MySQL it would be saved on the server.)
 const PRESENCE_KEY = 'ars_online';
 const TAB_ID = Math.random().toString(36).slice(2);
 const readPresence = () => { try { return JSON.parse(localStorage.getItem(PRESENCE_KEY)) || {}; } catch (e) { return {}; } };
@@ -506,12 +463,12 @@ const writePresence = p => { try { localStorage.setItem(PRESENCE_KEY, JSON.strin
 function setPresence(uid, on) {
   if (!uid) return;
   const p = readPresence(), now = Date.now(), tabs = p[uid] || {};
-  Object.keys(tabs).forEach(t => { if (now - tabs[t] > 120000) delete tabs[t]; });   // forget tabs that stopped checking in
+  Object.keys(tabs).forEach(t => { if (now - tabs[t] > 120000) delete tabs[t]; });
   if (on) tabs[TAB_ID] = now; else delete tabs[TAB_ID];
   p[uid] = tabs;
   writePresence(p);
 }
-function clearPresence(uid) { const p = readPresence(); delete p[uid]; writePresence(p); }   // all tabs of this person (used when suspending)
+function clearPresence(uid) { const p = readPresence(); delete p[uid]; writePresence(p); }
 const isOnline = uid => Object.values(readPresence()[uid] || {}).some(t => Date.now() - t < 120000);
 const beat = () => { if (me() && !me().off) setPresence(S.meId, true); };
 
@@ -525,11 +482,10 @@ function usersView() {
 }
 
 beat();
-setInterval(() => { beat(); if (UI.view === 'users') showView('users'); }, 20000);   // check in, and refresh the Users list if it is open
-window.addEventListener('pagehide', () => { if (S.meId) setPresence(S.meId, false); });   // this tab is closing
-window.addEventListener('storage', e => { if (e.key === PRESENCE_KEY && UI.view === 'users') showView('users'); });   // someone logged in or out in another tab
+setInterval(() => { beat(); if (UI.view === 'users') showView('users'); }, 20000);
+window.addEventListener('pagehide', () => { if (S.meId) setPresence(S.meId, false); });
+window.addEventListener('storage', e => { if (e.key === PRESENCE_KEY && UI.view === 'users') showView('users'); });
 
-// The student's own posts that are still waiting for an admin to approve them
 function pendingView() {
   const mine = S.res.filter(r => r.by === S.meId && r.status === 'Pending');
   return `<h2>Pending posts</h2><p class="mut">These are waiting for an admin to approve them. Other students can see them once they are approved.</p>` +
@@ -538,17 +494,15 @@ function pendingView() {
       <div class="mut">Posted ${r.date}</div></div>`).join('') || '<div class="empty">No pending posts. Everything you posted has been reviewed.</div>');
 }
 
-// The Statistics charts (Chart.js) live in stats.js: statsView(), drawStats() and destroyCharts() are used below.
-
 function showView(name, id) {
-  if (name !== 'detail' && !me()) return showLoginPrompt(name);   // guests can only open details
-  if ((name === 'admin' || name === 'log' || name === 'stats' || name === 'users') && !isAdmin()) return;   // Moderation, Activity, Statistics and Users are for admins
+  if (name !== 'detail' && !me()) return showLoginPrompt(name);
+  if ((name === 'admin' || name === 'log' || name === 'stats' || name === 'users') && !isAdmin()) return;
   UI.view = name; UI.vid = id;
   const r = name === 'detail' ? findRes(id) : null;
   if (name === 'detail' && !r) return closeView();
   destroyCharts();
   const views = { detail: () => detailView(r), profile: profileView, notifs: notifsView, admin: adminView, log: logView, stats: statsView, pending: pendingView, users: usersView };
-  $('#dynBody').classList.toggle('stats-wide', name === 'stats');   // the statistics pop-up is wider
+  $('#dynBody').classList.toggle('stats-wide', name === 'stats');
   $('#dynBody').innerHTML = '<button type="button" class="modal-close" data-a="close" aria-label="Close">&times;</button>' + views[name]();
   $('#dynModal').hidden = false;
   if (name === 'detail') loadPreview(r);
@@ -558,7 +512,6 @@ function closeView() { UI.view = null; $('#dynModal').hidden = true; $('#dynBody
 function refresh() { save(); renderNav(); renderFilters(); renderGrid(); renderTrend(); if (UI.view) showView(UI.view, UI.vid); }
 
 // ---------- File preview (shows what is inside the uploaded file) ----------
-// Images and PDFs are shown as they are, TXT as text, and DOCX as its text (no pictures).
 let previewUrls = [];
 
 function dataToBlob(url, type) {
@@ -568,7 +521,6 @@ function dataToBlob(url, type) {
   return new Blob([bytes], { type: type || head.slice(5, head.indexOf(';')) });
 }
 
-// A .docx is a zip file. Find word/document.xml inside it and pull out the text.
 async function docxText(blob) {
   const buf = new Uint8Array(await blob.arrayBuffer()), dv = new DataView(buf.buffer);
   let end = -1;
@@ -622,7 +574,6 @@ async function previewOf(f) {
   return '<p class="mut">No preview for this file type. Use Download to open it.</p>';
 }
 
-// Move the file strip in the details pop-up one file left or right
 function pvMove(dir) {
   const t = $('.pv-track'); if (!t) return;
   t.scrollBy({ left: dir * t.clientWidth, behavior: 'smooth' });
@@ -636,12 +587,11 @@ function pvUpdate(t) {
 }
 async function loadPreview(r) {
   const box = $('#preview');
-  if (!box) return;                                    // text-only posts have no files
+  if (!box) return;
   previewUrls.forEach(u => URL.revokeObjectURL(u)); previewUrls = [];
   const files = filesOf(r);
   const items = files.map((f, i) => `<div class="pv-item"><div class="pv-head"><b>${esc(f.name)}</b><span class="mut">${esc(f.type)}${f.size ? ' &middot; ' + fmtKB(f.size) : ''}</span>` +
     `<button type="button" data-a="dl" data-v="${r.id}" data-i="${i}">Download</button></div><div class="pv-body" id="pv${i}"><p class="mut">Loading preview&hellip;</p></div></div>`).join('');
-  // Several files: one at a time, move left / right with the arrows (or swipe, or the keyboard arrow keys)
   box.innerHTML = files.length < 2 ? items : `<div class="pv-stage"><button type="button" class="pv-arrow pv-prev" data-a="pvprev" aria-label="Previous file">&#8249;</button><button type="button" class="pv-arrow pv-next" data-a="pvnext" aria-label="Next file">&#8250;</button><span class="pv-count">1 / ${files.length}</span><div class="pv-track">${items}</div></div>`;
   const track = box.querySelector('.pv-track');
   if (track) { track.addEventListener('scroll', () => pvUpdate(track)); pvUpdate(track); }
@@ -649,7 +599,7 @@ async function loadPreview(r) {
     let html;
     try { html = await previewOf(files[i]); } catch (e) { html = '<p class="mut">Could not show a preview. Use Download to open the file.</p>'; }
     const body = $('#pv' + i);
-    if ($('#preview') === box && body) body.innerHTML = html;   // ignore if the pop-up changed meanwhile
+    if ($('#preview') === box && body) body.innerHTML = html;
   }
 }
 
@@ -682,23 +632,20 @@ function showPicked() {
     ? `<p class="mut pk-sum">${picked.length} file${picked.length > 1 ? 's' : ''} &middot; ${sizeText(total)}${warn ? ' &middot; <span class="pk-warn">' + warn + '</span>' : ''}</p>` : '');
 }
 
-// Choosing files adds them to the list (it does not replace what is already there)
 function addPicked() {
   [...$('#upFile').files].forEach(f => {
     if (!picked.some(x => x.name === f.name && x.size === f.size && x.lastModified === f.lastModified)) picked.push(f);
   });
-  $('#upFile').value = '';   // so the same file can be chosen again after it was removed
+  $('#upFile').value = '';
   showPicked();
 }
 
 async function submitUpload(e) {
   e.preventDefault();
   const msg = t => { const box = $('#uploadMsg'); box.textContent = t; box.hidden = false; box.scrollIntoView({ block: 'nearest' }); };
-  const files = picked.slice(), title = $('#upTitle').value.trim(), text = '';   // the "Post text" box was removed: a post is a link and/or files
-  const link = cleanLink($('#upLink').value);   // '' = none, null = not a web address
-  // Check the required choices ourselves, so the message shows right above the Post button
+  const files = picked.slice(), title = $('#upTitle').value.trim(), text = '';
+  const link = cleanLink($('#upLink').value);
   for (const [id, name] of [['#upYear', 'year'], ['#upProgram', 'program'], ['#upSem', 'semester']]) if (!$(id).value) return msg(`Please choose the ${name}.`);
-  // The course is typed: code and title, e.g. NET101 - Networking I
   const course = $('#upCourse').value.trim().replace(/\s+/g, ' ').slice(0, 80);
   if (!course) return msg('Please type the course code and title, e.g. NET101 - Networking I.');
   if (!/\S\s*[-–—]\s*\S/.test(course)) return msg('Please type both the course code and the title, e.g. NET101 - Networking I.');
@@ -713,7 +660,7 @@ async function submitUpload(e) {
   if (files.reduce((n, f) => n + f.size, 0) > MAX_TOTAL) return msg(`These files are too big together (max ${MAX_TOTAL / 1024 / 1024} MB per post).`);
 
   if (files.length) msg('Saving your files… please wait.');
-  const hashes = await Promise.all(files.map(fileHash));   // duplicate-file checker
+  const hashes = await Promise.all(files.map(fileHash));
   if (new Set(hashes).size < hashes.length) return msg('You picked the same file twice.');
   for (let i = 0; i < files.length; i++) {
     const dup = S.res.find(r => r.status !== 'Rejected' && (r.hash === hashes[i] || (r.files || []).some(x => x.hash === hashes[i])));
@@ -736,7 +683,7 @@ async function submitUpload(e) {
 
   const post = {
     id: S.nextId++, program: $('#upProgram').value, year: $('#upYear').value, course, title,
-    desc: $('#upDesc').value.trim(),   // stays empty when the uploader writes nothing
+    desc: $('#upDesc').value.trim(),
     type: !stored.length ? (link ? 'Link' : 'Text') : new Set(stored.map(f => f.type)).size === 1 ? stored[0].type : 'Mixed',
     kinds: [...new Set([...stored.map(f => f.type), ...(text ? ['Text'] : []), ...(link ? ['Link'] : [])])],
     meta: stored.length ? `${stored.length} file${stored.length > 1 ? 's' : ''} · ${fmtKB(kb)}` : link ? linkHost(link) : `${text.split(/\s+/).length} word${text.split(/\s+/).length === 1 ? '' : 's'}`,
@@ -755,7 +702,6 @@ async function submitUpload(e) {
 }
 
 // ---------- Big files live in IndexedDB (localStorage only holds ~5 MB) ----------
-// A post keeps only the file's name, type, size and a key; the file itself is stored under that key.
 let fileDb = null;
 function openFileDb() {
   return fileDb || (fileDb = new Promise((ok, fail) => {
@@ -776,14 +722,13 @@ async function dbDo(mode, fn) {
 const putBlob = (key, blob) => dbDo('readwrite', st => st.put(blob, key));
 const getBlob = key => dbDo('readonly', st => st.get(key));
 const delBlob = key => dbDo('readwrite', st => st.delete(key));
-// The file of a post as a Blob (newer posts: from IndexedDB; posts from older versions: from the saved text)
 async function fileBlob(f, type) {
   const blob = f.key ? await getBlob(f.key) : dataToBlob(f.data);
   if (!blob) throw new Error('file not found');
   return type ? new Blob([blob], { type }) : blob;
 }
 const fmtKB = kb => kb >= 1024 ? (kb / 1024).toFixed(1) + ' MB' : kb + ' KB';
-try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}   // ask the browser not to clear the files
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
 
 function saveAs(href, name) {
   const a = document.createElement('a');
@@ -791,7 +736,6 @@ function saveAs(href, name) {
   document.body.appendChild(a); a.click(); a.remove();
 }
 
-// i = one file of the post, no i = everything (all files, or the text of a text-only post)
 async function download(r, i) {
   const files = filesOf(r);
   const send = async f => {
@@ -805,8 +749,6 @@ async function download(r, i) {
 }
 
 // ---------- Login prompt ----------
-// Log in / Sign up open as a pop-up on this page (login.html still works as a separate page)
-// Guests can look around, but some actions need an account. This asks them to log in.
 function showLoginPrompt(action) {
   const what = { dl: 'download files', vote: 'upvote resources', post: 'comment', flag: 'report a resource', upload: 'upload resources' }[action] || 'see that page';
   UI.view = null;
@@ -817,8 +759,7 @@ function showLoginPrompt(action) {
 }
 
 // ---------- Log in / Sign up pop-up ----------
-// Same accounts and password scheme as login.js, so both ways of logging in work together.
-const ADMIN_EMAILS = ['admin@arpsmcc.com'];   // these emails become Administrators when they sign up
+const ADMIN_EMAILS = ['admin@arpsmcc.com'];
 async function hashText(text) {
   if (!window.crypto || !crypto.subtle) return btoa(unescape(encodeURIComponent(text)));
   const bytes = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)));
@@ -861,7 +802,7 @@ function authTab(tab) {
 function authMessage(text) { const box = $('#authMsg'); if (box) { box.textContent = text; box.hidden = !text; } }
 function enterSite(user) {
   S.meId = user.id;
-  try { sessionStorage.setItem('ars_me', String(user.id)); } catch (e) {}   // this tab's own login
+  try { sessionStorage.setItem('ars_me', String(user.id)); } catch (e) {}
   addLog('logged in'); beat();
   closeView(); refresh();
 }
@@ -889,7 +830,7 @@ document.addEventListener('click', e => {
   if (e.target.id === 'clearFilters') return clearFilters();
   if (!e.target.closest('.dd')) closeMenus();
   if (e.target.closest('#openUpload')) return openUpload();
-  if (e.target.closest('#trendingLink')) { UI.sort = 'top'; UI.page = 1; $('#sortSelect').value = 'top'; renderGrid(); return; }   // Trending = Most helpful first (the link then jumps to the list)
+  if (e.target.closest('#trendingLink')) { UI.sort = 'top'; UI.page = 1; $('#sortSelect').value = 'top'; renderGrid(); return; }
   if (e.target.id === 'closeUpload' || e.target.id === 'uploadModal') return $('#uploadModal').hidden = true;
   if (e.target.id === 'dynModal') return closeView();
 
@@ -912,7 +853,6 @@ document.addEventListener('click', e => {
   }
   if (a === 'pick') { UI[btn.dataset.id] = btn.dataset.val; renderFilters(); return renderGrid(); }
   if (a === 'out') { addLog('logged out'); setPresence(S.meId, false); S.meId = null; try { sessionStorage.setItem('ars_me', ''); } catch (e) {} closeView(); return refresh(); }
-  // Guests may read the AI summary; everything below needs an account
   if (a === 'ai' && r) { UI.shown[r.id] = !UI.shown[r.id]; if (me() && UI.shown[r.id]) addLog(`viewed AI summary of "${r.title}"`); return refresh(); }
   if (!me()) return showLoginPrompt(a);
 
@@ -950,18 +890,17 @@ $('#upPicked').addEventListener('click', e => {
   if (btn) { picked.splice(Number(btn.dataset.rm), 1); showPicked(); }
 });
 $('#sortSelect').addEventListener('change', e => { UI.sort = e.target.value; renderGrid(); });
-window.addEventListener('resize', () => { if (gridCols() !== lastCols) renderGrid(); });   // columns changed, so the page size changed
+window.addEventListener('resize', () => { if (gridCols() !== lastCols) renderGrid(); });
 $('#uploadForm').addEventListener('submit', submitUpload);
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeView(); $('#uploadModal').hidden = true; }
   if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && $('.pv-track') && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) pvMove(e.key === 'ArrowRight' ? 1 : -1);
 });
 
-if (me() && me().off) S.meId = null; // suspended users are logged out
+if (me() && me().off) S.meId = null;
 renderNav(); renderFilters(); renderGrid(); renderTrend();
 
 // ---------- Notification pop-ups ----------
-// A small message appears at the bottom right when someone comments on your upload, approves it, and so on.
 const myNotifs = () => S.notifs.filter(n => n.uid === S.meId);
 
 function toast(text) {
@@ -974,7 +913,6 @@ function toast(text) {
   setTimeout(() => t.remove(), 8000);
 }
 
-// When another tab changes the saved data (someone comments, approves...), this tab updates right away
 window.addEventListener('storage', e => {
   if (e.key !== KEY || !e.newValue) return;
   const seen = new Set(myNotifs().map(n => n.d + n.t)), mine = S.meId;
@@ -984,6 +922,5 @@ window.addEventListener('storage', e => {
   renderNav(); renderFilters(); renderGrid(); renderTrend();
 });
 
-// When the page opens: remind about notifications that are not opened yet
 const unreadNow = myNotifs().filter(n => !n.read).length;
 if (unreadNow) toast(`🔔 You have ${unreadNow} new notification${unreadNow === 1 ? '' : 's'}`);
